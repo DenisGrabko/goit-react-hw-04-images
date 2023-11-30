@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import Modal from '../Modal/Modal'; 
 
 function ImageGalleryItem({ image }) {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setisModalOpen] = useState(false);
 
   const toggleModal = () => {
-    setModalOpen((prev) => !prev);
+    setisModalOpen((prev) => !prev);
   }
 
   return (
