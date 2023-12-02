@@ -21,6 +21,28 @@ const App = () => {
     if (searchQuery === '') {
       return;
     }  
+
+     const fetchImages = (searchQuery, pageNumber) => {
+    fetchItemsByTag(searchQuery, pageNumber)
+      .then((newImagesArray) => {
+        if (newImagesArray.length === 0) {
+          Notiflix.Notify.failure('No images found.');
+        } else {
+          setImagesArray((prevImages) => [...prevImages, ...newImagesArray]);
+          setLoadMoreActive(newImagesArray.length === 12);                      
+        }        
+         
+        
+      })
+      .catch((error) => {
+        console.error('Error fetching images:', error);
+        Notiflix.Notify.failure('Error fetching images.');
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+    };
+    
     fetchImages(searchQuery, page);
   }, [searchQuery, page]);
 
@@ -39,26 +61,7 @@ const App = () => {
     setSearchQuery(searchQuery);
     setPage(1);
     setImagesArray([]);
-  };
-
-  const fetchImages = (searchQuery, pageNumber) => {
-    fetchItemsByTag(searchQuery, pageNumber)
-      .then((newImagesArray) => {
-        if (newImagesArray.length === 0) {
-          Notiflix.Notify.failure('No images found.');
-        } else {
-          setImagesArray((prevImages) => [...prevImages, ...newImagesArray]);
-          setLoadMoreActive(newImagesArray.length === 12);
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching images:', error);
-        Notiflix.Notify.failure('Error fetching images.');
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+  }; 
 
   const loadMoreHandler = () => {
     setPage((prevPage) => prevPage + 1);

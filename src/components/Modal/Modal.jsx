@@ -1,39 +1,39 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import './Modal.css';
 
-class Modal extends Component {
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
-  }
+const Modal = ({ imageURL, onClose }) => {
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown);
-  }
-
-  handleKeyDown = (e) => {
-    if (e.code === 'Escape') {
-      this.props.onClose();
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === 'Escape') {
+        onClose();
+      }
     }
-  };
 
-  handleBackgroundClick = (e) => {
+      document.addEventListener('keydown', handleKeyDown);
+
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+    }, [onClose]);
+
+
+ 
+  const handleBackgroundClick = (e) => {
     if (e.target.classList.contains('modal-background')) {
-      this.props.onClose();
+      onClose();
     }
-  };
-
-  render() {
-    const { imageURL } = this.props;
+  };  
 
     return (
-      <div className="modal-background" onClick={this.handleBackgroundClick}>
+      <div className="modal-background" onClick={handleBackgroundClick}>
             <div className="modal">
                 { /* eslint-disable-next-line */ }
           <img src={imageURL} alt="Large Image"  />  
         </div>
       </div>
     );
-  }
+  
 }
 
 export default Modal;
